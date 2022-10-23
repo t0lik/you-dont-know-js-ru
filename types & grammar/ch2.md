@@ -588,7 +588,7 @@ typeof a === "number";	// true
 
 Другими словами: "Типом НЕ-числа является число 'number'!" Ура запутывающим именам и семантике.
 
-`NaN` на вроде "сторожевого значения" (другими словами нормальное значение, которое несет специальный смысл), которое определяет сбой при проведении операции назначения числа `number`. Эта ошибка, по сути означает следующее: "Я попробовал выполнить математическую операция и произошла ошибка, поэтому, вместо результата, здесь ошибочное число `number`."
+`NaN` что-то вроде "сторожевого значения" (другими словами нормальное значение, которое несет специальный смысл), которое определяет сбой при проведении операции назначения числа `number`. Эта ошибка, по сути означает следующее: "Я попробовал выполнить математическую операцию и произошла ошибка, поэтому, вместо результата, здесь ошибочное число `number`."
 
 Итак, если у вас есть значение в какой-нибудь переменной, и вы хотите проверить, не является ли оно ошибочным числом `NaN`, вы должно быть думаете что можно просто его сравнить прямо с `NaN`, как с любым другим значением, например `null` или `undefined`. Неа.
 
@@ -782,9 +782,9 @@ isNegZero( 0 );			// false
 
 ### Специальное равенство
 
-As we saw above, the `NaN` value and the `-0` value have special behavior when it comes to equality comparison. `NaN` is never equal to itself, so you have to use ES6's `Number.isNaN(..)` (or a polyfill). Simlarly, `-0` lies and pretends that it's equal (even `===` strict equal -- see Chapter 4) to regular positive `0`, so you have to use the somewhat hackish `isNegZero(..)` utility we suggested above.
+Как мы заметили ранее, значения `NaN` и `-0` имеют особенное поведение в случае сравнения. `NaN` никогда не равно самому себе, поэтому необходимо использовать функцию из ES6 `Number.isNaN(..)` (или же полифил). Аналогично, `-0` *лжет* и притворяется равным (даже `===` строго равным -- см. Главу 4) положительному `0`, поэтому необходимо использовать хитрый способ `isNegZero(..)`, который мы предложили выше.
 
-As of ES6, there's a new utility that can be used to test two values for absolute equality, without any of these exceptions. It's called `Object.is(..)`:
+В ES6 появилась новая возможность, которую мы можем использовать для тестирования двух значений на абсолютное равенство без вышеперечисленных исключений. Она называется `Object.is(..)`:
 
 ```js
 var a = 2 / "foo";
@@ -796,7 +796,7 @@ Object.is( b, -0 );		// true
 Object.is( b, 0 );		// false
 ```
 
-There's a pretty simple polyfill for `Object.is(..)` for pre-ES6 environments:
+Есть достаточно простой полифил для `Object.is(..)` для браузеров, не поддерживающих ES6:
 
 ```js
 if (!Object.is) {
@@ -815,7 +815,7 @@ if (!Object.is) {
 }
 ```
 
-`Object.is(..)` probably shouldn't be used in cases where `==` or `===` are known to be *safe* (see Chapter 4 "Coercion"), as the operators are likely much more efficient and certainly are more idiomatic/common. `Object.is(..)` is mostly for these special cases of equality.
+`Object.is(..)`, вероятно, не должен использоваться в случаях, где `==` и `===` достоверно *безопасны* (см. Главу 4 "Coercion"), поскольку данные операторы скорее более эффективны и определенно более идиоматичны/распространены. `Object.is(..)` необходим для особенных случаев равенства.
 
 ## Значения и ссылки
 
@@ -972,14 +972,14 @@ console.log( b ); // 2, не 3
 
 Ссылки обладают мощными возможностями, но иногда они начинают мешать, а иногда они нужны там, где их нет. Управлять поведением ссылок (выбирать между копированием значений и копированием ссылок) можно только при помощи типа самого значения, так что вам придется косвенно влиять на поведение присваивания/передачи выбором типов используемых значений.
 
-## Review
+## Обзор
 
-In JavaScript, `array`s are simply numerically indexed collections of any value-type. `string`s are somewhat "`array`-like", but they have distinct behaviors and care must be taken if you want to treat them as `array`s. Numbers in JavaScript include both "integers" and floating-point values.
+В JavaScript массивы `array` являются численно индексированными коллекциями для любых типов значений. Строки `string` несколько "массивоподобны", но обладают отличительными особенностями, и нужно быть аккуратным, если вы хотите рассматривать их в роли массивов `array`. Значения чисел в JavaScript включают "целые" ("integers") и с плавающей точкой.
 
-Several special values are defined within the primitive types.
+В примитивах определено несколько специальных значений.
 
-The `null` type has just one value: `null`, and likewise the `undefined` type has just the `undefined` value. `undefined` is basically the default value in any variable or property if no other value is present. The `void` operator lets you create the `undefined` value from any other value.
+Тип `null` имеет одно значение: `null`, аналогично тип `undefined` имеет лишь значение `undefined`. `undefined` в целом является значением по умолчанию для любой переменной или свойства, если не указано иного значения. Оператор `void` позволяет вернуть значение `undefined` из любого другого значения.
 
-`number`s include several special values, like `NaN` (supposedly "Not a Number", but really more appropriately "invalid number"); `+Infinity` and `-Infinity`; and `-0`.
+Числа `number` включают несколько специальных значений, например `NaN` (условно "НЕ число", но на самом деле скорее "неправильное число"); `+Infinity` и `-Infinity`; и `-0`.
 
-Simple scalar primitives (`string`s, `number`s, etc.) are assigned/passed by value-copy, but compound values (`object`s, etc.) are assigned/passed by reference-copy. References are not like references/pointers in other languages -- they're never pointed at other variables/references, only at the underlying values.
+Простые скалярные примитивы (строки `string`, числа `number`, и т.д.) присваиваются/передаются копированием значения, однако сложные значения (объекты `object` и т.д.) присваиваются/передаются копированием ссылки. Ссылки не похожи на ссылки/указатели в других языках -- они никогда не указывают на другие переменные/ссылки, а только на основные значения.
